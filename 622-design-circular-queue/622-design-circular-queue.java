@@ -1,34 +1,50 @@
-//Implementation using Array
+//Implementation using LinkedList
 class MyCircularQueue {
     
-    int q[];
-    int size, front, rear;
+    class ListNode{
+        int val;
+        ListNode next;
+        
+        public ListNode(int data){
+            val = data;
+            next = null;           
+        }
 
+    }
+    
+    ListNode head;
+    ListNode tail;
+    int llsize;
+    int qsize;
+    
     public MyCircularQueue(int k) {
-        q = new int[k];
-        size = k;
-        front = rear = -1;
+        qsize = k;
+        head = tail = null;
+        llsize = 0;
     }
     
     public boolean enQueue(int value) {
-        //if(queue is empty)
-        if(isEmpty()){
-            front = rear = 0;
-            q[rear] = value;
-            return true;
-        }
-        
-        //else if(queue is full)
-        else if(isFull()){
+        //if(queue is full)
+        if(isFull()){
             return false;
         }
         
-        //else add element
-        else{
-            rear = (rear+1)%size;
-            q[rear] = value;
+        ListNode node = new ListNode(value);
+        //if(1st element)
+        if(isEmpty()){
+            head = tail = node;
+            llsize++;
             return true;
         }
+        
+        //add element in last
+        else{
+            tail.next = node;
+            tail = tail.next;
+            llsize++;
+            return true;
+        }
+        
     }
     
     public boolean deQueue() {
@@ -38,14 +54,16 @@ class MyCircularQueue {
         }
         
         //else if(only one element)
-        else if(front == rear){
-            front = rear = -1;
+        else if(head == tail){
+            head = tail = null;
+            llsize--;
             return true;
         }
         
         //else delete element
         else{
-            front = (front+1)%size;
+            head = head.next;
+            llsize--;
             return true;
         }
     }
@@ -58,7 +76,7 @@ class MyCircularQueue {
         
         //else return 1st element
         else{
-            return q[front];
+            return head.val;
         }
     }
     
@@ -70,16 +88,16 @@ class MyCircularQueue {
         
         //else return 1st element
         else{
-            return q[rear];
+            return tail.val;
         }
     }
     
     public boolean isEmpty() {
-        return front==-1; 
+        return llsize==0; 
     }
     
     public boolean isFull() {
-        return ((rear+1)%size == front);
+        return llsize==qsize;
     }
 }
 
