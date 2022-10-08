@@ -1,4 +1,4 @@
-//Push O(n) && Pop O(1)
+//Push O(1) && Pop O(n)
 class MyQueue {
     
     Stack<Integer> stk1;
@@ -11,34 +11,37 @@ class MyQueue {
     
     
     
-    public void push(int x) { //operation in O(n)
-        //if(queue is empty)
-        if(empty()){
-            stk1.push(x);
-        }
-        
-        //add element
-        else{
-            while(!empty()) //move elements from 1st stack to 2nd
-                stk2.push(stk1.pop()); 
-            
-            stk1.push(x); //push x in queue
-            
-            while(!stk2.isEmpty()) //move elements from 2nd stack to 1st
-                stk1.push(stk2.pop());
-        }
+    public void push(int x) { //operation in O(1)
+        stk1.push(x);
     }
     
     
     
-    public int pop() { //operation in O(1)
-        return stk1.pop();
+    public int pop() { //operation in O(n)
+        
+        while(!empty()) //move elements from 1st stack to 2nd
+            stk2.push(stk1.pop()); 
+        
+        int pop = stk2.pop(); //delete x in queue
+        
+        while(!stk2.isEmpty()) //move elements from 2nd stack to 1st
+            stk1.push(stk2.pop());
+        
+        return pop;
     }
     
     
     
     public int peek() {
-        return stk1.peek();
+        while(!empty()) //move elements from 1st stack to 2nd
+            stk2.push(stk1.pop());
+        
+        int peek = stk2.peek();   
+        
+        while(!stk2.isEmpty()) //move elements from 2nd stack to 1st
+            stk1.push(stk2.pop());
+        
+        return peek;
     }
     
     
